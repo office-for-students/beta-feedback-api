@@ -1,0 +1,101 @@
+openapi: 3.0.0
+info:
+  title: Feedback API
+  description: "API enables the discoverUni site to send user feedback to a datastore."
+  version: 1.0.0
+  license:
+    name: ""
+    url: ""
+paths:
+  /feedback:
+    post:
+      summary: "Sends a request with feedback information for the discoveruni site"
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              properties:
+                page:
+                  description: "The page in which the feedback is being given to."
+                  type: string
+                is_useful:
+                  description: "Flag to identify whether the feedback is positive or negative."
+                  type: boolean
+                questions:
+                  description: "A list of questions the form contains."
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      title:
+                        description: "The title of the question that feedback has been given to."
+                        type: string
+                      feedback:
+                        description: "The uer feedback or message that has been given."
+                        type: string
+      responses:
+        201:
+          description: "Successfully created a feedback document."
+        400:
+          $ref: '#/components/responses/InvalidRequestError'
+        404:
+          $ref: '#/components/responses/ResourceNotFound'
+        500:
+          $ref: '#/components/responses/InternalError'
+components:
+  schemas:
+    errorResponse:
+      description: "The error response body, contains specific details of why the request failed"
+      type: object
+      properties:
+        errors:
+          description: "A list of errors found for request"
+          type: array
+          items:
+            type: object
+            properties:
+              error:
+                description: "An error being returned for request"
+                type: string
+              error_values:
+                description: "A collection of request key/value pairs which resulted in error."
+                type: array
+                items:
+                  type: object
+                  properties:
+                    <key>:
+                      description: "The value of the key in question."
+                      type: string
+  responses:
+    ConflictError:
+      description: "Failed to process the request due to a conflict"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+    ForbiddenError:
+      description: "The request is forbidden"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+    InternalError:
+      description: "Failed to process the request due to an internal error"
+    InvalidRequestError:
+      description: "Failed to process the request due to invalid request"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+    ResourceNotFound:
+      description: "The resource was not found"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
+    UnauthorisedError:
+      description: "The token provided is unauthorised to carry out this operation"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorResponse'
