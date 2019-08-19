@@ -55,7 +55,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         feedback_creator = FeedbackCreator()
 
-
         feedback_creator.write_feedback_to_db(feedback)
 
         logging.info(f"Wrote feedback")
