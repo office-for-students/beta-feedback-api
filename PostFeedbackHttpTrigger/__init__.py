@@ -43,7 +43,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             logging.error(f"validate_feedback error message {e.message}")
             return func.HttpResponse(
                 get_http_error_response_json(
-                    "Bad Request", "json validation error", e.message
+                    "Bad Request", "JSON Validation Error", e.message
                 ),
                 headers={"Content-Type": "application/json"},
                 status_code=400,
