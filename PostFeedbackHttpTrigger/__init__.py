@@ -11,6 +11,7 @@ from SharedCode.utils import (
     get_collection_link,
     get_cosmos_client,
     get_http_error_response_json,
+    sanitise_feedback,
 )
 from SharedCode.exceptions import ValidationError
 
@@ -50,6 +51,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             )
 
         logging.info(f"received feedback: {feedback}")
+
+        sanitise_feedback(feedback)
+
+        logging.info(f"received feedback after sanitise: {feedback}")
 
         add_created_at_to_feedback(feedback)
 
