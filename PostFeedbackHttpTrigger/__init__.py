@@ -1,40 +1,68 @@
 import logging
+import os
+import traceback
+import json
 
 import azure.functions as func
 
 
+from SharedCode.utils import (
+    add_created_at_to_feedback,
+    get_collection_link,
+    get_cosmos_client,
+    get_http_error_response_json,
+)
+from SharedCode.exceptions import ValidationError
+
+
+from .feedback_creator import FeedbackCreator
+from .validators import validate_feedback
+
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    """Implements the REST API endpoint for posting a feedback document.
-
-    The endpoint implemented is:
-        /feedback
-
-    The API is documented in a swagger document.
-    """
 
     try:
-        logging.info("Process a request for an institution resource.")
-        logging.info(f"url: {req.url}")
-        logging.info(f"params: {req.params}")
-        logging.info(f"route_params: {req.route_params}")
+        logging.info("Process a feedback form.")
 
-        # Put all the parameters together
-        params = dict(req.route_params)
-        version = req.params.get("version", "1")
-        params["version"] = version
+        try:
+            feedback = req.get_json()
+        except ValueError as e:
+            logging.error(f"JSON decode error {e}")
+            return func.HttpResponse(
+                get_http_error_response_json(
+                    "Bad Request", "json decoding error", str(e)
+                ),
+                headers={"Content-Type": "application/json"},
+                status_code=400,
+            )
 
-        # TODO validate post request (check body has relevant parameters, you will need to check for sql injection)
+        try:
+            validate_feedback(feedback)
+        except ValidationError as e:
+            logging.error(f"The feedback data is not valid {feedback}")
+            logging.error(f"validate_feedback error message {e.message}")
+            return func.HttpResponse(
+                get_http_error_response_json(
+                    "Bad Request", "json validation error", e.message
+                ),
+                headers={"Content-Type": "application/json"},
+                status_code=400,
+            )
 
-        # TODO Create Feedback document
+        logging.info(f"received feedback: {feedback}")
 
-        # TODO Store document in feedback collection in cosmos db
+        add_created_at_to_feedback(feedback)
 
-        # TODO Return success/failure response
-        
+        feedback_creator = FeedbackCreator()
+
+
+        feedback_creator.write_feedback_to_db(feedback)
+
+        logging.info(f"Wrote feedback")
+        return func.HttpResponse(status_code=201)
 
     except Exception as e:
         logging.error(traceback.format_exc())
 
         # Raise so Azure sends back the HTTP 500
         raise e
-    
