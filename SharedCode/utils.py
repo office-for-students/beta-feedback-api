@@ -1,5 +1,6 @@
 """Functions shared by Azure Functions"""
 
+import datetime
 import json
 import os
 
@@ -38,3 +39,6 @@ def get_http_error_response_json(error_title, error_key, error_value):
         }]
     })
     return json.dumps(http_error_resp)
+
+def add_created_at_to_feedback(feedback):
+    feedback['created_at'] = datetime.datetime.utcnow().isoformat()
