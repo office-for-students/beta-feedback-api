@@ -34,7 +34,6 @@ def build_report():
     csvwriter.writeheader()
 
     for entry in feedback_list:
-        # remove_unwanted_cosmosdb_fields(entry)
         csv_entry = get_entry_for_csv(entry)
         csvwriter.writerow(csv_entry)
     csvfile.close()
@@ -101,16 +100,6 @@ def get_collection_link(db_id, collection_id):
 
     # Return a link to the relevant CosmosDB Container/Document Collection
     return "dbs/" + cosmosdb_database_id + "/colls/" + cosmosdb_collection_id
-
-
-def remove_unwanted_cosmosdb_fields(entry):
-    keys_to_delete = ["id", "_rid", "_self", "_etag", "_attachments", "_ts"]
-    for key in keys_to_delete:
-        try:
-            del entry[key]
-        except KeyError:
-            logging.warning(f"The expected Comsos DB key was not found: {key}")
-    return entry
 
 
 def get_fixed_url(url):
