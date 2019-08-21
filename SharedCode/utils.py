@@ -2,14 +2,14 @@
 
 import datetime
 import json
-import logging
 import os
 
 import azure.cosmos.cosmos_client as cosmos_client
 
 
+# Need to allow some of these becuase the unencoded URL is written to the feedback db
 PERMITTED_CHARS = (
-    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ- ,.!@?"
+    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ- ,*.!@?/:#=&%+_"
 )
 
 
