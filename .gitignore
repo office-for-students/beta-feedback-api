@@ -116,3 +116,6 @@ appsettings.json
 local.settings.json
 .python_packages
 beta-feedback-api.zip
+
+# ignore reports created by report_generator
+feedback_report.csv
