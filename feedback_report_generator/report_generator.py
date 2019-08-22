@@ -5,11 +5,9 @@ Reads the feedback JSON docs from the CosmosDB feedback container.
 Tries to fix broken URLs caused by characters being filtered by an earlier
 version of the Feedback API.
 
-Formats as necessary e.g., make the date excel friendly.
+Does some formatting e.g., make the date excel friendly.
 
 Writes report out in CSV format
-
-
 """
 
 from datetime import datetime
@@ -20,25 +18,25 @@ import csv
 
 import azure.cosmos.cosmos_client as cosmos_client
 
-def build_report():
+
+def generate_report():
 
     FIELDNAMES = [
-        "date",
-        "page",
-        "is useful",
-        "how was this useful",
-        "how could we improve",
+        "Date",
+        "Page",
+        "Is Useful",
+        "How Was This Useful",
+        "How Could We Improve",
     ]
 
     feedback_list = get_feedback_list()
-    csvfile = open("feedback_report.csv", "w", newline="")
-    csvwriter = csv.DictWriter(csvfile, fieldnames=FIELDNAMES)
-    csvwriter.writeheader()
+    with open("feedback_report.csv", "w", newline="") as csvfile:
+        csvwriter = csv.DictWriter(csvfile, fieldnames=FIELDNAMES)
+        csvwriter.writeheader()
 
-    for entry in feedback_list:
-        csv_entry = get_entry_for_csv(entry)
-        csvwriter.writerow(csv_entry)
-    csvfile.close()
+        for entry in feedback_list:
+            csv_entry = get_entry_for_csv(entry)
+            csvwriter.writerow(csv_entry)
 
 
 def get_feedback_list():
@@ -46,12 +44,6 @@ def get_feedback_list():
     collection_link = get_collection_link(
         "AzureCosmosDbDatabaseId", "AzureCosmosDbFeedbackCollectionId"
     )
-
-    #
-    # If you wish to query all records after a specific date, specify the
-    # date as shown in the example below:
-    # "SELECT * from c where c.created_at >= \"2019-08-21T10:00:03Z\""
-    #
 
     query = "SELECT * from c"
     options = {"enableCrossPartitionQuery": True}
@@ -61,20 +53,20 @@ def get_feedback_list():
 def get_entry_for_csv(entry):
     csv_entry = {}
 
-    csv_entry["date"] = convert_to_excel_date(entry["created_at"])
-    csv_entry["page"] = get_fixed_url(entry["page"])
-    csv_entry["is useful"] = "Yes" if entry["is_useful"] else "No"
-    csv_entry["how was this useful"] = ""
-    csv_entry["how could we improve"] = ""
-    questions = entry["questions"]
+    csv_entry["Date"] = convert_to_excel_date(entry["created_at"])
+    csv_entry["Page"] = get_fixed_url(entry["page"])
+    csv_entry["Is Useful"] = "Yes" if entry["is_useful"] else "No"
+    csv_entry["How Was This Useful"] = ""
+    csv_entry["How Could We Improve"] = ""
 
-    # Currently CMS always writes exactly two questions to the array.
-    assert len(questions) == 2
+    questions = entry["questions"]
+    assert len(questions) == 2, "We expect CMS to add exactly 2 questions"
+
     for question in questions:
         if "useful" in question["title"]:
-            csv_entry["how was this useful"] = question["feedback"]
+            csv_entry["How Was This Useful"] = question["feedback"]
         elif "improve" in question["title"]:
-            csv_entry["how could we improve"] = question["feedback"]
+            csv_entry["How Could We Improve"] = question["feedback"]
     return csv_entry
 
 
@@ -104,7 +96,7 @@ def get_collection_link(db_id, collection_id):
 
 
 def get_fixed_url(url):
-    """Fix some of issues that may appear in urls that were over sanitised"""
+    """Fix some issues that may appear in urls that were over sanitised"""
 
     if re.search(r"https[^:]{1}", url):
         url = re.sub(r"^https", "https://", url)
@@ -113,4 +105,4 @@ def get_fixed_url(url):
 
 
 if __name__ == "__main__":
-    build_report()
+    generate_report()
