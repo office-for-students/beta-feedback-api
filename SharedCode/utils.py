@@ -71,5 +71,6 @@ def sanitise_questions(questions):
 def sanitise_question_string(input_str):
     return "".join(c for c in input_str if c in PERMITTED_QUESTION_CHARS)
 
+
 def sanitise_url_string(input_str):
     return "".join(c for c in input_str if c in PERMITTED_URL_CHARS)

@@ -5,7 +5,11 @@ from SharedCode.utils import sanitise_url_string, sanitise_question_string
 
 class TestSanitiseUrlString(unittest.TestCase):
     def test_with_permitted_url(self):
-        input_url = "https://prod-discover-uni.azurewebsites.net/course-finder/results/?subject_query=%22Artificial+intelligence%22&institution_query=&mode_query=Part-time&countries_query=England"
+        input_url = (
+            "https://prod-discover-uni.azurewebsites.net/course-finder/"
+            "results/?subject_query=%22Artificial+intelligence%22&institution_query"
+            "=&mode_query=Part-time&countries_query=England"
+        )
         sanitised_url = sanitise_url_string(input_url)
         self.assertEqual(input_url, sanitised_url)
 

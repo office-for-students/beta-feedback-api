@@ -9,12 +9,9 @@ from PostFeedbackHttpTrigger import main
 
 
 class TestMainAzureFunction(unittest.TestCase):
-
     @mock.patch("feedback_creator.utils.get_collection_link")
     @mock.patch("feedback_creator.utils.get_cosmos_client")
-    def test_with_valid_request(
-        self, mock_get_collection_link, mock_get_cosmos_client
-    ):
+    def test_with_valid_request(self, mock_get_collection_link, mock_get_cosmos_client):
 
         invalid_feedback_body = get_string("fixtures/valid_feedback.json")
         invalid_feedback_body = bytearray(invalid_feedback_body, "utf8")
@@ -27,7 +24,6 @@ class TestMainAzureFunction(unittest.TestCase):
 
         # Check status code
         self.assertEqual(resp.status_code, 201)
-
 
     @mock.patch("feedback_creator.utils.get_collection_link")
     @mock.patch("feedback_creator.utils.get_cosmos_client")
