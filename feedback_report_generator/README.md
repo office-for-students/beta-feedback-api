@@ -33,6 +33,10 @@ export AzureCosmosDbKey="<connection_key>"
 export AzureCosmosDbDatabaseId="<database_id>"
 export AzureCosmosDbFeedbackCollectionId="<collection_id>"
 
+NB you should use the filename setup_env_vars.sh as it is in .gitignore for this
+repo to help prevent sensitive config being accidentally committed and pushed
+to github.
+
 2. Run 
 ```
 source setup_env_vars.sh

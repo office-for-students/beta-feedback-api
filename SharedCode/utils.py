@@ -8,8 +8,12 @@ import azure.cosmos.cosmos_client as cosmos_client
 
 
 # Need to allow some of these becuase the unencoded URL is written to the feedback db
-PERMITTED_CHARS = (
+PERMITTED_URL_CHARS = (
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ- ,*.!@?/:#=&%+_"
+)
+
+PERMITTED_QUESTION_CHARS = (
+    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ- ,*.!'@?:&_"
 )
 
 
@@ -51,7 +55,7 @@ def add_created_at_to_feedback(feedback):
 
 def sanitise_feedback(feedback):
     """Only allow whitelisted characters"""
-    feedback["page"] = sanitise_input_string(feedback["page"])
+    feedback["page"] = sanitise_url_string(feedback["page"])
     if "questions" in feedback:
         sanitise_questions(feedback["questions"])
 
@@ -59,10 +63,14 @@ def sanitise_feedback(feedback):
 def sanitise_questions(questions):
     for question in questions:
         if "title" in question:
-            question["title"] = sanitise_input_string(question["title"])
+            question["title"] = sanitise_question_string(question["title"])
         if "feedback" in question:
-            question["feedback"] = sanitise_input_string(question["feedback"])
+            question["feedback"] = sanitise_question_string(question["feedback"])
 
 
-def sanitise_input_string(input_str):
-    return "".join(c for c in input_str if c in PERMITTED_CHARS)
+def sanitise_question_string(input_str):
+    return "".join(c for c in input_str if c in PERMITTED_QUESTION_CHARS)
+
+
+def sanitise_url_string(input_str):
+    return "".join(c for c in input_str if c in PERMITTED_URL_CHARS)

@@ -2,6 +2,9 @@ beta-feedback-api
 =================
 Service to allow users of the discover uni site to send feedback of the site and for this information to be stored for later analysis.
 
+### Important Note for API Users 
+Do not display unfiltered errors from the API to the users of the website. The errors returned by the API contain the data provided by the user as part of the request and they may not be safe to render in the browser.
+
 ### Configuration Settings
 
 Add the following to your local.settings.json:

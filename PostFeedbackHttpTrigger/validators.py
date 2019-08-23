@@ -7,15 +7,15 @@ from SharedCode.exceptions import ValidationError
 FEEDBACK_JSONSCHEMA = {
     "type": "object",
     "properties": {
-        "page": {"type": "string"},
+        "page": {"type": "string", "maxLength": 2047},
         "is_useful": {"type": "boolean"},
         "questions": {
             "type": "array",
             "items": {
                 "question": {"type": "object"},
                 "properties": {
-                    "title": {"type": "string"},
-                    "feedback": {"type": "string"},
+                    "title": {"type": "string", "maxLength": 200},
+                    "feedback": {"type": "string", "maxLength": 4000},
                 },
                 "additionalProperties": False,
             },
