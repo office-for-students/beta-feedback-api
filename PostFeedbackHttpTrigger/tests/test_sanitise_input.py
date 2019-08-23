@@ -17,8 +17,13 @@ class TestSanitiseUrlString(unittest.TestCase):
 
 
 class TestSanitiseQuestionString(unittest.TestCase):
-    def test_with_valid_input_str(self):
+    def test_with_valid_input_str_1(self):
         valid_str = "I like discoveruni. It's really useful! :?& fred@acme.com"
+        sanitised_str = sanitise_question_string(valid_str)
+        self.assertEqual(valid_str, sanitised_str)
+
+    def test_with_valid_input_str_2(self):
+        valid_str = "how_was_this_useful"
         sanitised_str = sanitise_question_string(valid_str)
         self.assertEqual(valid_str, sanitised_str)
 
