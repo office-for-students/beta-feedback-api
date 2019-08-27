@@ -1,0 +1,13 @@
+{
+    "page": "https://prod-discover-uni.azurewebsites.net/course-finder/results/?subject_query=%22Artificial+intelligence%22&institution_query=&mode_query=Part-time&countries_query=England",
+    "is_useful": true,
+    "questions": [{
+            "title": "how_was_this_useful",
+            "feedback": "found a good uni next door to me"
+        },
+        {
+            "title": "how_could_we_improve",
+            "feedback": ""
+        }
+    ]
+}
