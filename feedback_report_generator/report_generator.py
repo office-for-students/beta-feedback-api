@@ -24,9 +24,7 @@ def generate_report():
     FIELDNAMES = [
         "Date",
         "Page",
-        "Is Useful",
-        "How Was This Useful",
-        "How Could We Improve",
+        "Feedback",
     ]
 
     feedback_list = get_feedback_list()
@@ -55,18 +53,11 @@ def get_entry_for_csv(entry):
 
     csv_entry["Date"] = convert_to_excel_date(entry["created_at"])
     csv_entry["Page"] = get_fixed_url(entry["page"])
-    csv_entry["Is Useful"] = "Yes" if entry["is_useful"] else "No"
-    csv_entry["How Was This Useful"] = ""
-    csv_entry["How Could We Improve"] = ""
+    csv_entry["Feedback"] = entry["questions"][0]["feedback"]
 
     questions = entry["questions"]
-    assert len(questions) == 2, "We expect CMS to add exactly 2 questions"
+    assert len(questions) == 1, "We now expect just one item in questions "
 
-    for question in questions:
-        if "useful" in question["title"]:
-            csv_entry["How Was This Useful"] = question["feedback"]
-        elif "improve" in question["title"]:
-            csv_entry["How Could We Improve"] = question["feedback"]
     return csv_entry
 
 
