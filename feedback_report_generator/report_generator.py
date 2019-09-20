@@ -10,22 +10,18 @@ Does some formatting e.g., make the date excel friendly.
 Writes report out in CSV format
 """
 
-from datetime import datetime
-import json
+import csv
 import os
 import re
-import csv
+
+from datetime import datetime
 
 import azure.cosmos.cosmos_client as cosmos_client
 
 
 def generate_report():
 
-    FIELDNAMES = [
-        "Date",
-        "Page",
-        "Feedback",
-    ]
+    FIELDNAMES = ["Date", "Page", "Feedback"]
 
     feedback_list = get_feedback_list()
     with open("feedback_report.csv", "w", newline="") as csvfile:
@@ -50,13 +46,15 @@ def get_feedback_list():
 
 def get_entry_for_csv(entry):
     csv_entry = {}
-
     csv_entry["Date"] = convert_to_excel_date(entry["created_at"])
     csv_entry["Page"] = get_fixed_url(entry["page"])
-    csv_entry["Feedback"] = entry["questions"][0]["feedback"]
+    csv_entry["Feedback"] = ""
 
     questions = entry["questions"]
-    assert len(questions) == 1, "We now expect just one item in questions "
+    for question in questions:
+        if question["feedback"]:
+            csv_entry["Feedback"] = question["feedback"]
+            break
 
     return csv_entry
 
