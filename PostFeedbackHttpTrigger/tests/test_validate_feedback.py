@@ -19,5 +19,16 @@ class TestValidateFeedback(unittest.TestCase):
         except ValidationError:
             self.fail("validate_feedback raised unexpected ValidationError")
 
+    def test_with_valid_feedback(self):
+        success = True
+        valid_feedback = json.loads(get_string("fixtures/valid_feedback.json"))
+        try:
+            validate_feedback(valid_feedback)
+        except ValidationError:
+            success = False
+
+        # Check we
+        self.assertTrue(success, "Failed valid feedback")
+
 
 # TODO add more tests
