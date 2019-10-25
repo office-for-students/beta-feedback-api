@@ -10,4 +10,3 @@ def get_string(filename):
     with open(os.path.join(PARENT_DIR, filename)) as infile:
         string = infile.read()
     return string
-

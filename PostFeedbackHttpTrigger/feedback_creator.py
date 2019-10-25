@@ -12,11 +12,9 @@ from SharedCode import utils
 
 
 class FeedbackCreator:
-    def __init__(self):
-        self.cosmosdb_client = utils.get_cosmos_client()
-        self.collection_link = utils.get_collection_link(
-            "AzureCosmosDbDatabaseId", "AzureCosmosDbFeedbackCollectionId"
-        )
+    def __init__(self, client, collection_link):
+        self.cosmosdb_client = client
+        self.collection_link = collection_link
 
     def write_feedback_to_db(self, feedback_entry):
         self.cosmosdb_client.CreateItem(self.collection_link, feedback_entry)
