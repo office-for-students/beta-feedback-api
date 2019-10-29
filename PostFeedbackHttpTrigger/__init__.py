@@ -2,9 +2,15 @@ import logging
 import os
 import traceback
 import json
+import os
+import sys
+import inspect
 
 import azure.functions as func
 
+CURRENTDIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+PARENTDIR = os.path.dirname(CURRENTDIR)
+sys.path.insert(0, PARENTDIR)
 
 from SharedCode.utils import (
     add_created_at_to_feedback,
@@ -18,6 +24,14 @@ from SharedCode.exceptions import ValidationError
 
 from .feedback_creator import FeedbackCreator
 from .validators import validate_feedback
+
+cosmosdb_uri = os.environ["AzureCosmosDbUri"]
+cosmosdb_key = os.environ["AzureCosmosDbKey"]
+cosmosdb_database_id = os.environ["AzureCosmosDbDatabaseId"]
+cosmosdb_collection_id = os.environ["AzureCosmosDbFeedbackCollectionId"]
+
+# Intialise cosmos db client
+client = get_cosmos_client(cosmosdb_uri, cosmosdb_key)
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
@@ -58,7 +72,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         add_created_at_to_feedback(feedback)
 
-        feedback_creator = FeedbackCreator()
+        collection_link = get_collection_link(
+            cosmosdb_database_id, cosmosdb_collection_id
+        )
+        feedback_creator = FeedbackCreator(client, collection_link)
 
         feedback_creator.write_feedback_to_db(feedback)
 

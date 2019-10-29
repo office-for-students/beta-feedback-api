@@ -10,24 +10,18 @@ Does some formatting e.g., make the date excel friendly.
 Writes report out in CSV format
 """
 
-from datetime import datetime
-import json
+import csv
 import os
 import re
-import csv
+
+from datetime import datetime
 
 import azure.cosmos.cosmos_client as cosmos_client
 
 
 def generate_report():
 
-    FIELDNAMES = [
-        "Date",
-        "Page",
-        "Is Useful",
-        "How Was This Useful",
-        "How Could We Improve",
-    ]
+    FIELDNAMES = ["Date", "Page", "Feedback"]
 
     feedback_list = get_feedback_list()
     with open("feedback_report.csv", "w", newline="") as csvfile:
@@ -52,21 +46,16 @@ def get_feedback_list():
 
 def get_entry_for_csv(entry):
     csv_entry = {}
-
     csv_entry["Date"] = convert_to_excel_date(entry["created_at"])
     csv_entry["Page"] = get_fixed_url(entry["page"])
-    csv_entry["Is Useful"] = "Yes" if entry["is_useful"] else "No"
-    csv_entry["How Was This Useful"] = ""
-    csv_entry["How Could We Improve"] = ""
+    csv_entry["Feedback"] = ""
 
     questions = entry["questions"]
-    assert len(questions) == 2, "We expect CMS to add exactly 2 questions"
-
     for question in questions:
-        if "useful" in question["title"]:
-            csv_entry["How Was This Useful"] = question["feedback"]
-        elif "improve" in question["title"]:
-            csv_entry["How Could We Improve"] = question["feedback"]
+        if question["feedback"]:
+            csv_entry["Feedback"] = question["feedback"]
+            break
+
     return csv_entry
 
 
