@@ -9,16 +9,18 @@ Do not display unfiltered errors from the API to the users of the website. The e
 
 Add the following to your local.settings.json:
 
-| Variable                          | Default                | Description                                                  |
-| ----------------------------------| ---------------------- | ------------------------------------------------------------ |
-| FUNCTIONS_WORKER_RUNTIME          | python                 | The programming language the function worker runs on         |
-| AzureWebJobsStorage               | {retrieve from portal} | The default endpoint to access storage account               |
-| StopEtlPipelineOnWarning          | false                  | Boolean flag to stop function worker on a warning            |
-| AzureCosmosDbUri                  | {retrieve from portal} | The uri to the cosmosdb instance                             |
-| AzureCosmosDbKey                  | {retrieve from portal} | The database key to access cosmosdb instance                 |
-| AzureCosmosDbConnectionString     | {retrieve from portal} | The string to enable a connection to the cosomos db resource |
-| AzureCosmosDbDatabaseId           | discoverUni            | The name of the cosmosdb database                            |
-| AzureCosmosDbFeedbackCollectionId | feedback               | The name of the courses collection/container in cosmosdb     |
+| Variable                                 | Default                | Description                                                  |
+| ---------------------------------------- | ---------------------- | ------------------------------------------------------------ |
+| FUNCTIONS_WORKER_RUNTIME                 | python                 | The programming language the function worker runs on         |
+| AzureWebJobsStorage                      | {retrieve from portal} | The default endpoint to access storage account               |
+| StopEtlPipelineOnWarning                 | false                  | Boolean flag to stop function worker on a warning            |
+| AzureCosmosDbUri                         | {retrieve from portal} | The uri to the cosmosdb instance                             |
+| AzureCosmosDbKey                         | {retrieve from portal} | The database key to access cosmosdb instance                 |
+| AzureCosmosDbConnectionString            | {retrieve from portal} | The string to enable a connection to the cosomos db resource |
+| AzureCosmosDbDatabaseId                  | discoverUni            | The name of the cosmosdb database                            |
+| AzureCosmosDbFeedbackCollectionId        | feedback               | The name of the feedback collection/container in cosmosdb    |
+| AzureStorageAccountFeedbackContainerName | feedback               | The name of the feedback container in the azure storage      |
+| AzureStorageBlobName                     | feedback_report.csv    | The name of the feedback blob in the azure storage           |
 
 ### Setup
 
