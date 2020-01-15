@@ -29,8 +29,6 @@ def main(req: func.HttpRequest) -> None:
         function_start_datetime = datetime.today().strftime("%d-%m-%Y %H:%M:%S")
         function_start_date = datetime.today().strftime("%d.%m.%Y")
 
-        mail_helper.send_message(f"Automated feedback report generator started on {function_start_datetime}", f"Automated Feedback Report {environment} - {function_start_date} - Started")
-
         logging.info(
             f"GenerateReport function started on {function_start_datetime}"
         )
