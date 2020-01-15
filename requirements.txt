@@ -1,6 +1,8 @@
+azure==4.0.0
 azure-cosmos==3.1.2
 azure-functions-worker==1.0.0
 azure-functions==1.0.3
+azure-storage-blob==2.0.1
 pytest==4.6.3
 jsonschema==3.0.2
 sendgrid==6.1.0
