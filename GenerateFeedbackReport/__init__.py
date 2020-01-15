@@ -55,7 +55,9 @@ def main(req: func.HttpRequest) -> None:
         function_end_datetime = datetime.today().strftime("%d-%m-%Y %H:%M:%S")
         function_end_date = datetime.today().strftime("%d.%m.%Y")
 
-        mail_helper.send_message(f"Automated feedback report generator completed on {function_end_datetime}", f"Automated Feedback Report {environment} - {function_end_date} - Completed")
+        report_uri = os.environ["AzureStorageReportUri"]
+
+        mail_helper.send_message(f"Automated feedback report generator completed on {function_end_datetime}. Download at {report_uri}", f"Automated Feedback Report {environment} - {function_end_date} - Completed")
 
         logging.info(
             f"GenerateReport function finished on {function_end_datetime}"

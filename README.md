@@ -21,6 +21,7 @@ Add the following to your local.settings.json:
 | AzureCosmosDbFeedbackCollectionId        | feedback               | The name of the feedback collection/container in cosmosdb    |
 | AzureStorageAccountFeedbackContainerName | feedback               | The name of the feedback container in the azure storage      |
 | AzureStorageBlobName                     | feedback_report.csv    | The name of the feedback blob in the azure storage           |
+| AzureStorageReportUri                    | {retrieve from portal} | The URI to download the feedback report                      |
 | Environment                              | {retrieve from portal} | The name of the environment on which the function is running |
 | SendGridAPIKey                           | {retrieve from portal} | The API key used by the SendGrid client                      |
 | SendGridFromEmail                        |                        | The e-mail address used to send automated e-mails            |
