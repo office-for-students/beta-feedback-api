@@ -13,27 +13,40 @@ Writes report out in CSV format
 import csv
 import os
 import re
+import logging
 
 from datetime import datetime
 
 import azure.cosmos.cosmos_client as cosmos_client
 
 
-def generate_report():
+def generate_report(csvfile):
 
     FIELDNAMES = ["Date", "Page", "Feedback"]
 
     feedback_list = get_feedback_list()
-    with open("feedback_report.csv", "w", newline="") as csvfile:
-        csvwriter = csv.DictWriter(csvfile, fieldnames=FIELDNAMES)
-        csvwriter.writeheader()
 
-        for entry in feedback_list:
-            csv_entry = get_entry_for_csv(entry)
-            csvwriter.writerow(csv_entry)
+    csvwriter = csv.DictWriter(csvfile, fieldnames=FIELDNAMES)
+    csvwriter.writeheader()
+
+    logging.info(
+        "Processing feedback list"
+    )
+
+    for entry in feedback_list:
+        csv_entry = get_entry_for_csv(entry)
+        csvwriter.writerow(csv_entry)
+
+    logging.info(
+        "Finished processing feedback list"
+    )
 
 
 def get_feedback_list():
+    logging.info(
+        "Retrieving feedback list from cosmosdb"
+    )
+
     cosmos_db_client = get_cosmos_client()
     collection_link = get_collection_link(
         "AzureCosmosDbDatabaseId", "AzureCosmosDbFeedbackCollectionId"
@@ -41,6 +54,10 @@ def get_feedback_list():
 
     query = "SELECT * from c"
     options = {"enableCrossPartitionQuery": True}
+
+    logging.info(
+        "Finished retrieving feedback list from cosmosdb"
+    )
     return list(cosmos_db_client.QueryItems(collection_link, query, options))
 
 
@@ -91,7 +108,3 @@ def get_fixed_url(url):
         url = re.sub(r"^https", "https://", url)
         url = re.sub(r"azurewebsites\.net", "azurewebsites.net/", url)
     return url
-
-
-if __name__ == "__main__":
-    generate_report()
