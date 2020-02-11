@@ -55,7 +55,7 @@ def main(req: func.HttpRequest) -> None:
 
         report_uri = os.environ["AzureStorageReportUri"]
 
-        mail_helper.send_message(f"Automated feedback report generator completed on {function_end_datetime}. Download at {report_uri}", f"Automated Feedback Report {environment} - {function_end_date} - Completed")
+        mail_helper.send_html_message(f'<html><body>Automated feedback report generator completed on {function_end_datetime}. Download <a href="{report_uri}">here</a></body></html>', f'Automated Feedback Report {environment} - {function_end_date} - Completed')
 
         logging.info(
             f"GenerateReport function finished on {function_end_datetime}"
