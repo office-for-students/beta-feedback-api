@@ -11,6 +11,7 @@ class MailHelper:
         self.from_email = (os.environ["SendGridFromEmail"], os.environ["SendGridFromName"])
         self.to_emails = os.environ["SendGridToEmailList"].split(";")
 
+
     def send_message(self, message, subject):
         mail = Mail(from_email=self.from_email, to_emails=self.to_emails, subject=subject, plain_text_content=message)
 
@@ -19,4 +20,13 @@ class MailHelper:
             return response
         except Exception as e:
             raise e
-        
+
+
+    def send_html_message(self, message, subject):
+        mail = Mail(from_email=self.from_email, to_emails=self.to_emails, subject=subject, html_content=message)
+
+        try:
+            response = self.send_grid.send(mail)
+            return response
+        except Exception as e:
+            raise e
