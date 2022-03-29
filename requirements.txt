@@ -1,4 +1,4 @@
-azure
+azure==4.0.0
 azure-cosmos
 azure-functions-worker
 azure-functions
